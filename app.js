@@ -5,15 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var webRoute = require('./routes/index');
-var apiRoutes = require('./routes/api');
-
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
 var app = express();
 
-var mongoose = require('mongoose');
-// var db = Mongoose.createConnection('localhost', 'bloodHeroes');
-mongoose.connect('mongodb://localhost/BloodHeroes'); // connect to our database
+var Mongoose = require('mongoose');
+var db = Mongoose.createConnection('localhost', 'bloodHeroes');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,10 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', webRoute);
-
-// all of our routes will be prefixed with /api
-app.use('/api', apiRoutes);
+app.use('/', routes);
+app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
